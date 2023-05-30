@@ -8,7 +8,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Podcast;
 use App\Entity\User;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Form\PodcastType;
+use Doctrine\ORM\Mapping\Id;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class PodcastController extends AbstractController
 {
@@ -19,19 +25,20 @@ class PodcastController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/podcast', name: 'podcast_index')]
+    #[Route('/podcasts', name: 'podcast_index')]
     public function index(): Response
     {
-        $podcast = $this->entityManager->getRepository(Podcast::class)->findAll();
+        $user = $this->getUser();
+        $user = $this->entityManager->getRepository(User::class)->find($user);
 
-        dump($podcast);
+        $podcast = $user->getPodcasts();
+
         if (!$podcast) {
             throw $this->createNotFoundException('Podcast no encontrado');
         }
 
         return $this->render('podcast/index.html.twig', [
             'controller_name' => 'PodcastController',
-            'username' => 'Juan Calzadilla',
             'podcasts' => $podcast,
         ]);
     }
@@ -46,33 +53,87 @@ class PodcastController extends AbstractController
         if (!$podcast) {
             throw $this->createNotFoundException('Podcast no encontrado');
         }
-        
+
         return $this->render('podcast/show.html.twig', [
             'controller_name' => 'PodcastController',
-            'username' => 'Juan Calzadilla',
             'podcast' => $podcast,
             'otrosPodcasts' => $otros,
         ]);
     }
 
-    #[Route('/new/podcast', name: 'podcast_new')]
-    public function create(){
-
-        $podcast = new Podcast();
-        $user = $this->entityManager->getRepository(User::class)->find(1);
-        $podcast->setTitulo('Podcast 1')
-        ->setDescripcion('Descripcion del podcast 1')
-        ->setFechaSubida(new \DateTime('now'))
-        ->setAudio('audio.mp3')
-        ->setImagen('imagen.jpg')
-        ->setVisible(true);
-
+    #[Route('/podcasts/new', name: 'podcast_new')]
+    public function create(Request $request, SluggerInterface $slugger)
+    {
+        $podcast = new Podcast(visible: true);
+        //Usamos el usuario logado
+        $user = $this->getUser();
         $podcast->setUser($user);
+        $form = $this->createForm(PodcastType::class, $podcast);
+        // $podcast->setUser($user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
 
-        $this->entityManager->persist($podcast);
+            $audio = $form->get('audio')->getData();
+            $imagen = $form->get('imagen')->getData();
+
+            if ($audio) {
+                $originalFilename = pathinfo($audio->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $audio->guessExtension();
+
+                $audio->move(
+                    $this->getParameter('audio_directory'),
+                    $newFilename
+                );
+
+                $podcast->setAudio($newFilename);
+            }
+
+            if ($imagen) {
+                $originalFilename = pathinfo($imagen->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $imagen->guessExtension();
+
+                $imagen->move(
+                    $this->getParameter('image_directory'),
+                    $newFilename
+                );
+
+                $podcast->setImagen($newFilename);
+            }
+
+            $this->entityManager->persist($podcast);
+            $this->entityManager->flush();
+            return $this->redirectToRoute('podcast_index');
+        }
+
+        return $this->render('podcast/create.html.twig', [
+            'controller_name' => 'PodcastController',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/podcasts/delete', name: 'podcast_delete', methods: ['POST'])]
+    public function delete(Request $request)
+    {
+        $id = $request->request->get('podcast_id');
+        $podcast = $this->entityManager->getRepository(Podcast::class)->find($id);
+        $this->entityManager->remove($podcast);
         $this->entityManager->flush();
+        return $this->redirectToRoute('podcast_index');
+    }
 
-        return new JsonResponse(['status' => 'Podcast creado'], Response::HTTP_CREATED);
 
+
+    #[Route('/podcasts/update', name: 'podcast_update')]
+    public function update(Request $request, SluggerInterface $slugger)
+    {
+        $id = $request->request->get('podcast_id');
+        $podcast = $this->entityManager->getRepository(Podcast::class)->find($id);
+        
+        $podcast->setTitulo($request->request->get('titulo'));
+        $podcast->setDescripcion($request->request->get('descripcion'));
+        $this->entityManager->flush();
+        return $this->redirectToRoute('podcast_index');
     }
 }
