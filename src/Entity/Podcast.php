@@ -36,6 +36,18 @@ class Podcast
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    public function __construct($titulo = null, $descripcion = null, $audio = null, $imagen = null, $visible = null, $user = null)
+    {
+        $this->titulo = $titulo;
+        $this->fecha_subida = new \DateTime();
+        $this->descripcion = $descripcion;
+        $this->audio = $audio;
+        $this->imagen = $imagen;
+        $this->visible = $visible;
+        $this->user = $user;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;

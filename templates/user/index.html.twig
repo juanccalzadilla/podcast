@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Hello UserController!
+  
+{% endblock %}
+
+{% block body %}
+  <style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+  <div class="container mt-5">
+    <h1 class="">
+      Crear cuenta
+          
+    </h1>
+    <div class="mt-5 w-50">
+      {{ form(registroForm) }}
+
+        <div class="d-flex">
+          <a href="{{ path('login') }}" class="btn btn-link mt-3 ms-3">
+            Iniciar sesión
+                      
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>{% endblock %}
