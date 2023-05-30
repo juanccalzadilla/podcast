@@ -56,4 +56,45 @@ class UserController extends AbstractController
         // controller can be blank: it will never be called!
         throw new \Exception('Don\'t forget to activate logout in security.yaml');
     }
+
+
+    #[Route('/update', name: 'user_update', methods: ['POST'])]
+    public function update(Request $request): Response
+    {
+        $user = $this->entityManager->getRepository(User::class)->find($request->request->get('user_id'));
+
+        $user->setNombre($request->request->get('nombre'));
+        $user->setApellidos($request->request->get('apellidos'));
+        $user->setEmail($request->request->get('email'));
+
+        if ($request->request->get('password') != null) {
+            $plainPassword = $request->request->get('password');
+            $hashedPassword = password_hash($plainPassword, PASSWORD_BCRYPT);
+            $user->setPassword($hashedPassword);
+        }
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        //Hacemos la redirección a la misma página donde se encontraba el usuario
+        if ($user->getRoles() == ['ROLE_ADMIN']) {
+            return $this->redirectToRoute('admin_index');
+        }
+
+        return $this->redirectToRoute('podcast_index');
+    }
+
+    #[Route('/delete', name: 'user_delete', methods: ['POST'])]
+    public function delete(Request $request): Response
+    {
+        $user = $this->entityManager->getRepository(User::class)->find($request->request->get('user_id'));
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
+        return $this->redirectToRoute('admin_index');
+    }
+
+
+
+
+
 }
