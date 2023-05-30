@@ -5,6 +5,7 @@
     <title>
       {% block title %}
         Welcome!
+              
       {% endblock %}
     </title>
 
@@ -42,7 +43,8 @@
         <!-- Navbar brand -->
         <a class="navbar-brand me-2" href="{{ url('podcast_index') }}">
           PodcastTime
-              
+                        
+                  
         </a>
 
         <!-- Toggle button -->
@@ -58,14 +60,23 @@
               <li class="nav-item">
                 <a class="nav-link {% if app.request.get('_route') == 'podcast_index' %} active {% endif %}" href="{{ url('podcast_index') }}">
                   Página principal
+                        
                 </a>
               </li>
 
               <li class="nav-item">
                 <a class="nav-link {% if app.request.get('_route') == 'podcast_new' %} active {% endif %}" href="{{ url('podcast_new') }}">
                   Nuevo podcast
+                          
                 </a>
               </li>
+              {% if app.user.roles[0] == 'ROLE_ADMIN' %}
+                <li class="nav-item">
+                  <a class="nav-link {% if app.request.get('_route') == 'admin_index' %} active {% endif %}" href="{{ url('admin_index') }}">
+                    Administración
+                  </a>
+                </li>
+              {% endif %}
             </ul>
           {% endif %}
 

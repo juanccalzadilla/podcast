@@ -41,6 +41,7 @@ class PodcastType extends AbstractType
                     ]
                 ],
                 [
+                    'required' => false,
                     'contraints' => [
                         new File([
                             'mimeTypes' => [
@@ -61,6 +62,7 @@ class PodcastType extends AbstractType
                     ],
                 ],
                 [
+                    'required' => false,
                     'constraints' => [
                         new File([
                             'maxSize' => '1024k',
