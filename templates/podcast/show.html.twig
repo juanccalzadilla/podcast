@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PodCastTime{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 1400px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="container mt-5">
+  <h1 class="">{{username}}, ¿listo para escuchar algo asombroso? 🎤</h1>
+
+<div class="row">
+  <div class="col-md-4">
+    <!-- Content -->
+    <div class="container d-flex justify-content-center my-4 mb-5">
+      <div id="mobile-box">
+        <!-- Card -->
+        <div class="card">
+          <div
+            class="bg-image hover-overlay ripple"
+            data-mdb-ripple-color="light"
+          >
+            <img
+              class="card-img-top"
+              src="{{podcast[0].getImagen()}}"
+              alt="Card image cap"
+            />
+            <a href="#!">
+              <div
+                class="mask"
+                style="background-color: rgba(251, 251, 251, 0.15)"
+              ></div>
+            </a>
+          </div>
+          <div class="card-body text-center">
+            <h5 class="h5 font-weight-bold">
+              <a href="#">{{podcast[0].getTitulo()}}</a>
+            </h5>
+            <p class="mb-0">Juan Calzadilla</p>
+
+            <audio id="music" preload="true">
+              <source src="#" />
+            </audio>
+            <div id="audioplayer">
+              <i id="pButton" class="fas fa-play"></i>
+              <div id="timeline">
+                <div id="playhead"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Card -->
+      </div>
+    </div>
+    <!-- Content -->
+  </div>
+
+  <div class="col-md-6">
+    <h2 class="mt-4">{{podcast[0].getTitulo()}}</h2>
+    <p class="lead">
+      {{podcast[0].getDescripcion()}}
+    </p>
+
+    {# Otros podcasts #}
+
+    <div style="height: 15vh;"></div>
+    
+    <h5>Otros podcasts</h5>
+    <div class="row mb-4">
+    {% for podcast in otrosPodcasts %}
+    <div class="col-md-4">
+        <div class="card">
+          <div
+            class="bg-image hover-overlay ripple"
+            data-mdb-ripple-color="light"
+          >
+            <img
+              class="card-img-top"
+              src="{{podcast.getImagen()}}"
+              alt="Card image cap"
+            />
+            <a href="#!">
+              <div
+                class="mask"
+                style="background-color: rgba(251, 251, 251, 0.15)"
+              ></div>
+            </a>
+          </div>
+          <div class="card-body text-center">
+            <h5 class="h5 font-weight-bold">
+              <a href="{{
+                url('podcast_show', {id: podcast.id})
+              }}">{{podcast.getTitulo()}}</a>
+            </h5>
+          </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+   
+</div>
+
+
+
+</div>
+
+
+  
+</div>
+</div>
+{% endblock %}
