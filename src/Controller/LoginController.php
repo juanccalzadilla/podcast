@@ -13,13 +13,18 @@ class LoginController extends AbstractController
     public function index(AuthenticationUtils $authUtils): Response
     {
         
-        //Si hay un usuario logueado, redirigimos a la página de inicio
+        /**
+         * Redireccion al index si el usuario ya esta logueado
+         */
         if ($this->getUser()) {
             return $this->redirectToRoute('podcast_index');
         }
 
+        /**
+         * Recuperamos el error de autenticacion si lo hay
+         */
         $error = $authUtils->getLastAuthenticationError();
-
+        
         $lastUsername = $authUtils->getLastUsername();
 
         return $this->render('login/index.html.twig', [

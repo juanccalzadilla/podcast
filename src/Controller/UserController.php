@@ -36,6 +36,10 @@ class UserController extends AbstractController
             $hashedPassword = password_hash($plainPassword, PASSWORD_BCRYPT);
 
             $user->setPassword($hashedPassword);
+        
+            /**
+             * Asignamos el rol de usuario por defecto.
+             */
             $user->setRoles(['ROLE_USER']);
 
             $this->entityManager->persist($user);
@@ -49,6 +53,11 @@ class UserController extends AbstractController
             'registroForm' => $registroForm->createView(),
         ]);
     }
+
+    /**
+     * 
+     * Metodo para crear un usuario desde el panel de administración
+     */
 
     #[Route('/registroAdmin', name: 'user_registroAdmin', methods: ['POST'])]
     public function createUserByAdmin(Request $request): Response

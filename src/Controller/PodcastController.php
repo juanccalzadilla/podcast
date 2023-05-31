@@ -21,6 +21,12 @@ class PodcastController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
+
+    /**
+     * @var User $user (Logged user)
+     * @var Podcast[] $podcast (All podcasts from logged user)
+     */
+
     #[Route('/podcasts', name: 'podcast_index')]
     public function index(): Response
     {
@@ -36,13 +42,20 @@ class PodcastController extends AbstractController
         ]);
     }
 
+    /**
+     * @var Podcast[] $podcast (Devolvemos el podcast que buscamos)
+     * @var Podcast[] $otrosPodcasts (Devolvemos los ultimos tres podcasts subidos excepto el que buscamos)
+     */
+
     #[Route('/podcast/{id}', name: 'podcast_show')]
     public function show($id): Response
     {
         $podcast = $this->entityManager->getRepository(Podcast::class)->findPodcast($id);
-        $otros = $this->entityManager->getRepository(Podcast::class)->findOtherPodcasts($id);
-        dump($podcast);
+        $otrosPodcasts = $this->entityManager->getRepository(Podcast::class)->findOtherPodcasts($id);
 
+        /**
+         * Si el podcast no existe devolvemos un 404
+         */
         if (!$podcast) {
             return $this->render('podcast/404.html.twig');
         }
@@ -50,7 +63,7 @@ class PodcastController extends AbstractController
         return $this->render('podcast/show.html.twig', [
             'controller_name' => 'PodcastController',
             'podcast' => $podcast,
-            'otrosPodcasts' => $otros,
+            'otrosPodcasts' => $otrosPodcasts,
         ]);
     }
 
@@ -67,6 +80,10 @@ class PodcastController extends AbstractController
 
             $audio = $form->get('audio')->getData();
             $imagen = $form->get('imagen')->getData();
+
+            /**
+             * Creamos dos metodos nuevo para guardar el audio y la imagen, ya que es un codigo que se puede reutilizar.
+             */
 
             $podcast->setAudio($this->_saveAudio($audio, $slugger));
             $podcast->setImagen($this->_saveImage($imagen, $slugger));
@@ -107,6 +124,7 @@ class PodcastController extends AbstractController
         $this->entityManager->flush();
         return $this->redirectToRoute('podcast_index');
     }
+    
 
     private function _saveAudio($audio, $slugger){
 

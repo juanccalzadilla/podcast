@@ -25,6 +25,14 @@ class AdminController extends AbstractController
     #[Route('/admin', name: 'admin_index')]
     public function index(): Response
     {
+        /**
+         * @var Podcast[] $allPodcasts
+         * @var User[] $allUsers
+         * @var User $user
+         * @var PodcastType $edit_form
+         * @var UserType $user_form
+         */
+
         $allPodcasts = $this->entityManager->getRepository(Podcast::class)->findAll();
         $allUsers = $this->entityManager->getRepository(User::class)->findAll();
         $user = new User();
