@@ -25,7 +25,7 @@ class UserController extends AbstractController
     public function userRegistro(Request $request): Response
     {
         $user = new User();
-        $registroForm = $this->createForm(UserType::class, $user);
+        $registroForm = $this->createForm(UserType::class, $user, ['attr' => ['class' => 'w-100']]);
 
         $registroForm->handleRequest($request);
 

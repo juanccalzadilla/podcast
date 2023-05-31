@@ -34,7 +34,7 @@ class PodcastController extends AbstractController
         $podcast = $user->getPodcasts();
 
         if (!$podcast) {
-            throw $this->createNotFoundException('Podcast no encontrado');
+            return $this->render('podcast/404.html.twig');
         }
 
         return $this->render('podcast/index.html.twig', [
@@ -52,7 +52,7 @@ class PodcastController extends AbstractController
         dump($podcast);
 
         if (!$podcast) {
-            throw $this->createNotFoundException('Podcast no encontrado');
+            return $this->render('podcast/404.html.twig');
         }
 
         return $this->render('podcast/show.html.twig', [
@@ -114,6 +114,7 @@ class PodcastController extends AbstractController
         ]);
     }
 
+
     #[Route('/podcasts/delete', name: 'podcast_delete', methods: ['POST'])]
     public function delete(Request $request)
     {
@@ -123,7 +124,6 @@ class PodcastController extends AbstractController
         $this->entityManager->flush();
         return $this->redirectToRoute('podcast_index');
     }
-
 
 
     #[Route('/podcasts/update', name: 'podcast_update')]
