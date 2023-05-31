@@ -1,160 +1,129 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Panel de control
-        
-    
+Panel de control
 {% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h1>
-            Bienvenido al panel de control 
-                                    
-                        
-            {{ app.user.getNombre() }}
-        </h1>
+<div class="container mt-5">
+    <h1>
+        Bienvenido al panel de control
+        {{ app.user.getNombre() }}
+    </h1>
 
-        <!-- Tabs navs -->
-        <ul class="nav nav-tabs mb-3" id="ex-with-icons" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="ex-with-icons-tab-1" data-mdb-toggle="tab" href="#ex-with-icons-tabs-1" role="tab" aria-controls="ex-with-icons-tabs-1" aria-selected="true">
-                    <i class="fas fa-microphone me-2"></i>
-                    Podcasts
-                                                        
-                                    
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="ex-with-icons-tab-2" data-mdb-toggle="tab" href="#ex-with-icons-tabs-2" role="tab" aria-controls="ex-with-icons-tabs-2" aria-selected="false">
-                    <i class="fas fa-users fa-fw me-2"></i>
-                    Usuarios                               
-                                                        
-                                    
-                </a>
-            </li>
-        </ul>
-        <!-- Tabs navs -->
+    <!-- Tabs navs -->
+    <ul class="nav nav-tabs mb-3" id="ex-with-icons" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="ex-with-icons-tab-1" data-mdb-toggle="tab" href="#ex-with-icons-tabs-1"
+                role="tab" aria-controls="ex-with-icons-tabs-1" aria-selected="true">
+                <i class="fas fa-microphone me-2"></i>
+                Podcasts
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="ex-with-icons-tab-2" data-mdb-toggle="tab" href="#ex-with-icons-tabs-2" role="tab"
+                aria-controls="ex-with-icons-tabs-2" aria-selected="false">
+                <i class="fas fa-users fa-fw me-2"></i>
+                Usuarios
+            </a>
+        </li>
+    </ul>
+    <!-- Tabs navs -->
 
-        <!-- Tabs content -->
-        <div class="tab-content" id="ex-with-icons-content">
-            <div class="tab-pane fade show active" id="ex-with-icons-tabs-1" role="tabpanel" aria-labelledby="ex-with-icons-tab-1">
-                <div class="row">
-                    {% for podcast in podcasts %}
-                        <div class="col-md-3 mt-2">
-                            <div class="card">
-                                <img src="{{ asset('uploads/images/' ~ podcast.imagen) }}" class="card-img-top" style="height: 200px; object-fit: cover; max-height: 200px;" alt="Fissure in Sandstone" />
-                                <div class="card-body">
-                                    <h5 class="card-title">
-                                        {{ podcast.titulo }}
-                                    </h5>
-                                    <p class="card-text">
-                                        {{ podcast.descripcion|length > 50 ? podcast.descripcion|slice(0, 50) ~ '...' : podcast.descripcion }}
-                                    </p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <a href="{{ url('podcast_show', {id: podcast.id}) }}" class="btn btn-primary">
-                                            Ir al podcast                                                      
-                                                                                                                                                                            
-                                                                                                                                
-                                                                                    
-                                        </a>
-                                        <button onclick="S_ModalEditar({{ podcast.id }}, '{{ podcast.titulo }}', '{{ podcast.descripcion }}')" class="btn btn-warning">
+    <!-- Tabs content -->
+    <div class="tab-content" id="ex-with-icons-content">
+        <div class="tab-pane fade show active" id="ex-with-icons-tabs-1" role="tabpanel"
+            aria-labelledby="ex-with-icons-tab-1">
+            <div class="row">
+                {% for podcast in podcasts %}
+                <div class="col-md-3 mt-2">
+                    <div class="card">
+                        <img src="{{ asset('uploads/images/' ~ podcast.imagen) }}" class="card-img-top" style="height: 200px; object-fit: cover; max-height: 200px;" alt="Fissure in Sandstone" />
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ podcast.titulo }}
+                            </h5>
+                            <p class="card-text">
+                                {{ podcast.descripcion|length > 50 ? podcast.descripcion|slice(0, 50) ~ '...' :
+                                podcast.descripcion }}
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{{ url('podcast_show', {id: podcast.id}) }}" class="btn btn-primary">
+                                    Ir al podcast
+                                </a>
+                                <button onclick="S_ModalEditar({{ podcast.id }}, '{{ podcast.titulo }}', '{{ podcast.descripcion }}')" class="btn btn-warning">
                                             <i class="fas fa-edit"></i>
-                                        </button>
+                                </button>
 
-                                        <button onclick="S_ModalBorrar({{ podcast.id }})" class="btn btn-danger">
+                                <button onclick="S_ModalBorrar({{ podcast.id }})" class="btn btn-danger">
                                             <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                                </button>
                             </div>
                         </div>
-                    {% else %}
-                        <div class="alert alert-warning">
-                            No hay podcasts para mostrar                                   
-                                                                                
-                                                    
-                        </div>
-                    {% endfor %}
+                    </div>
                 </div>
-
+                {% else %}
+                <div class="alert alert-warning">
+                    No hay podcasts para mostrar
+                </div>
+                {% endfor %}
             </div>
-            <div class="tab-pane fade" id="ex-with-icons-tabs-2" role="tabpanel" aria-labelledby="ex-with-icons-tab-2">
-                {# Table -> id ,nombre, apellidos, email  #}
+
+        </div>
+        <div class="tab-pane fade" id="ex-with-icons-tabs-2" role="tabpanel" aria-labelledby="ex-with-icons-tab-2">
+            {# Table -> id ,nombre, apellidos, email #}
+            <div class="card p-4">
+                <div class="card-header">
+                    <button class="btn btn-success" onclick="S_ModalCrearUsuario()"><i class="fas fa-plus me-2"></i> Crear nuevo usuario</button>
+                </div>
                 <table class="table align-middle mb-0 bg-white">
                     <thead class="bg-light">
                         <tr>
-                            <th>
-                                #
-                                                                                                                            
-                                                                                            
-                                                            
-                            </th>
-                            <th>
-                                Nombre
-                                                                                                                            
-                                                                                            
-                                                            
-                            </th>
-                            <th>
-                                Apellidos
-                                                                                                                            
-                                                                                            
-                                                            
-                            </th>
-                            <th>
-                                Email
-                                                                                                                            
-                                                                                            
-                                                            
-                            </th>
-                            <th>
-                                Acciones
-                                                                                                                            
-                                                                                            
-                                                            
-                            </th>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Apellidos</th>
+                            <th>Email</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for user in users %}
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="ms-3">
-                                            <p class="fw-bold mb-1">
-                                                {{ user.id }}
-                                            </p>
-                                        </div>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="ms-3">
+                                        <p class="fw-bold mb-1">
+                                            {{ user.id }}
+                                        </p>
                                     </div>
-                                </td>
-                                <td>
-                                    <p class="fw-normal mb-1">
-                                        {{ user.nombre }}
-                                    </p>
-                                </td>
-                                <td>
-                                    <p class="fw-normal mb-1">
-                                        {{ user.apellidos }}
-                                    </p>
-                                </td>
-                                <td>
-                                    <p class="fw-normal mb-1">
-                                        {{ user.email }}
-                                    </p>
-                                </td>
-                                <td>
-                                    <button onclick="S_ModalEditarUsuario({{ user.id }}, '{{ user.nombre }}', '{{ user.apellidos }}', '{{ user.email }}')" type="button" class="btn btn-outline-primary btn-sm btn-rounded">
-                                        Editar                    
-                                                                                                                    
-                                                                            
-                                    </button>
-                                    <button onclick="S_ModalBorrarUsuario({{ user.id }})" type="button" class="btn btn-link text-danger btn-sm btn-rounded">
-                                        Borrar                  
-                                                                            
-                                    </button>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                            <td>
+                                <p class="fw-normal mb-1">
+                                    {{ user.nombre }}
+                                </p>
+                            </td>
+                            <td>
+                                <p class="fw-normal mb-1">
+                                    {{ user.apellidos }}
+                                </p>
+                            </td>
+                            <td>
+                                <p class="fw-normal mb-1">
+                                    {{ user.email }}
+                                </p>
+                            </td>
+                            <td>
+                                <button onclick="S_ModalEditarUsuario({{ user.id }}, '{{ user.nombre }}', '{{ user.apellidos }}', '{{ user.email }}')" type="button" class="btn btn-outline-primary btn-sm btn-rounded">
+                                            Editar                         
+                                </button>
+                                {% if user.id != app.user.id %}
+                                <button onclick="S_ModalBorrarUsuario({{ user.id }})" type="button" class="btn btn-link text-danger btn-sm btn-rounded">
+                                            Borrar                  
+                                </button>
+                                {% endif %}
+                            </td>
+                        </tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -162,215 +131,243 @@
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Modal Eliminar -->
+<!-- Modal Eliminar -->
 
-    <div class="modal fade" id="modalBorrar" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        Borrar podcast              
-                                            
-                    </h5>
-                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p class="text-center">
-                        ¿Estás seguro de borrar este podcast?                   
-                                            
-                    </p>
-                    <p class="text-muted text-center fw-bold">
-                        Esta acción no se puede deshacer         
-                                            
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <form action="{{ url('podcast_delete') }}" method="post">
-                        <input type="hidden" id="podcast_id_delete" name="podcast_id" value="">
+<div class="modal fade" id="modalBorrar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Borrar podcast
+                </h5>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">
+                    ¿Estás seguro de borrar este podcast?
+                </p>
+                <p class="text-muted text-center fw-bold">
+                    Esta acción no se puede deshacer
+                </p>
+            </div>
+            <div class="modal-footer">
+                <form action="{{ url('podcast_delete') }}" method="post">
+                    <input type="hidden" id="podcast_id_delete" name="podcast_id" value="">
 
-                            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
-                                Cerrar                                   
-                                                            
-                            </button>
-                            <button type="submit" class="btn btn-danger">
-                                Confirmar      
-                                                            
-                            </button>
-                        </form>
-                    </div>
-                </div>
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                                Cerrar                                         
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                                Confirmar    
+                    </button>
+                </form>
             </div>
         </div>
     </div>
+</div>
+</div>
 
-    <!-- Modal Editar -->
+<!-- Modal Editar -->
 
-    <div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        Editar podcast  
-                                                                    
-                                            
-                    </h5>
-                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ url('podcast_update') }}" method="post" novalidate>
-                        <input type="hidden" id="podcast_id_editar" name="podcast_id" value="">
-
-                            <div class="mb-3">
-                                <label for="titulo" class="form-label">
-                                    Título
-                                                                                                                          
-                                                                                                        
-                                                                    
-                                </label>
-                                <input type="text" class="form-control" id="titulo" name="titulo" required></div>
-
-                                <div class="mb-3">
-                                    <label for="descripcion" class="form-label">
-                                        Descripción  
-                                                                                                                                        
-                                                                                                                    
-                                                                            
-                                    </label>
-                                    <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    {{ form_row(edit_form.imagen) }}
-                                </div>
-                                <div class="mb-3">
-
-                                    {{ form_row(edit_form.audio) }}
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
-                                        Cerrar                                  
-                                                                                                                                            
-                                                                                                                    
-                                                                            
-                                    </button>
-                                    <button type="submit" class="btn btn-primary">
-                                        Confirmar        
-                                                                                                                                            
-                                                                                                                    
-                                                                            
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Editar podcast
+                </h5>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
+            <div class="modal-body">
+                <form action="{{ url('podcast_update') }}" method="post" novalidate>
+                    <input type="hidden" id="podcast_id_editar" name="podcast_id" value="">
 
-        <!-- Modal Eliminar -->
-
-        <div class="modal fade" id="modalBorrarUsuario" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">
-                            Borrar usuario 
-                                                                            
-                                                    
-                        </h5>
-                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    <div class="mb-3">
+                        <label for="titulo" class="form-label">
+                                    Título              
+                        </label>
+                        <input type="text" class="form-control" id="titulo" name="titulo" required>
                     </div>
-                    <div class="modal-body">
-                        <p class="text-center">
-                            ¿Estás seguro de borrar este usuario?     
-                                                                            
-                                                    
-                        </p>
-                        <p class="text-danger text-center fw-bold">
-                            Todos los podcasts de este usuario también se borrarán      
-                                                                            
-                                                    
-                        </p>
+
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">
+                                        Descripción                              
+                        </label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        {{ form_row(edit_form.imagen) }}
+                    </div>
+                    <div class="mb-3">
+
+                        {{ form_row(edit_form.audio) }}
                     </div>
                     <div class="modal-footer">
-                        <form action="{{ url('user_delete') }}" method="post">
-                            <input type="hidden" id="usuario_id_delete" name="user_id" value="">
-                                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
-                                    Cerrar                  
-                                </button>
-                                <button type="submit" class="btn btn-danger">
-                                    Confirmar                  
-                                </button>
-                            </form>
-                        </div>
+                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                                        Cerrar                                                              
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                                        Confirmar                                     
+                        </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
+    </div>
+</div>
+</div>
 
+<!-- Modal Eliminar -->
 
-        <div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modalBorrarUsuario" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Borrar usuario
+                </h5>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">
+                    ¿Estás seguro de borrar este usuario?
+                </p>
+                <p class="text-danger text-center fw-bold">
+                    Todos los podcasts de este usuario también se borrarán
+                </p>
+            </div>
+            <div class="modal-footer">
+                <form action="{{ url('user_delete') }}" method="post">
+                    <input type="hidden" id="usuario_id_delete" name="user_id" value="">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                                    Cerrar                  
+                                </button>
+                    <button type="submit" class="btn btn-danger">
+                                    Confirmar                  
+                                </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">
-          Editar usuario
-        </h5>
-        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
-      </div>
+<div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Editar usuario
+                </h5>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url('user_update') }}" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" id="usuario_id_editar" name="user_id" value="">
 
-      <form action="{{ url('user_update') }}" method="POST">
-        <div class="modal-body">
-          <input type="hidden" id="usuario_id_editar" name="user_id" value="">
-
-          <div class="mb-3">
-            <label for="nombre" class="form-label">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">
               Nombre
             </label>
-            <input type="text" class="form-control" id="nombre" name="nombre" required>
-          </div>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
 
-          <div class="mb-3">
-            <label for="apellidos" class="form-label">
+                    <div class="mb-3">
+                        <label for="apellidos" class="form-label">
               Apellidos
             </label>
-            <input type="text" class="form-control" id="apellidos" name="apellidos" required>
-          </div>
+                        <input type="text" class="form-control" id="apellidos" name="apellidos" required>
+                    </div>
 
-          <div class="mb-3">
-            <label for="email" class="form-label">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
               Email
             </label>
-            <input type="email" class="form-control" id="email" name="email" required>
-          </div>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
 
-          <div class="mb-3">
-            <label for="password" class="form-label">
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
               Contraseña ( Dejar en blanco para no cambiar )
             </label>
-            <input type="password" class="form-control" id="password" name="password">
-          </div>
-        </div>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                </div>
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
             Cerrar
           </button>
-          <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary">
             Confirmar
           </button>
+                </div>
+            </form>
         </div>
-
-      </form>
     </div>
-
-  </div>
-
 </div>
- <script>
 
-        function S_ModalBorrar(IdPodcast){
+
+
+<div class="modal fade" id="modalCrearUsuario" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Crear usuario
+                </h5>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form action="{{url('user_registroAdmin')}}" method="POST">
+
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">
+                Nombre
+                </label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="apellidos" class="form-label">
+                Apellidos
+                </label>
+                        <input type="text" class="form-control" id="apellidos" name="apellidos" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                Email
+                </label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                Contraseña
+                    
+                </label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                Cerrar
+                </button>
+                        <button type="submit" class="btn btn-primary">
+                Confirmar
+                </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function S_ModalBorrar(IdPodcast){
           $('#podcast_id_delete').val(IdPodcast);
           $('#modalBorrar').modal('show');
         }
@@ -395,8 +392,11 @@
          $('#email').val(email);
           $('#modalEditarUsuario').modal('show');
         }
-        
-    </script>
 
-        {% endblock %}
+        function S_ModalCrearUsuario(){
+          $('#modalCrearUsuario').modal('show');
+        }
         
+</script>
+
+{% endblock %}
