@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+PodCastTime
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="">
+        Hola
+        {{ app.user.nombre }}
+        👋🏻, ¿hora de un nuevo podcast? 🎤
+    </h1>
+    <div class="row">
+        <div class="mt-5 card col-md-6 p-4">
+            {{ form(form) }}
+        </div>
+    </div>
+</div>
+</div>
+</div>{% endblock %}

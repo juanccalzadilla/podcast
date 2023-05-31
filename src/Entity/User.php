@@ -38,8 +38,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Podcast::class, orphanRemoval: true)]
     private Collection $podcasts;
 
-    public function __construct()
+    public function __construct($id = null, $email = null, $password = null, $nombre = null, $apellidos = null)
     {
+        $this->id = $id;
+        $this->email = $email;
+        $this->password = $password;
+        $this->nombre = $nombre;
+        $this->apellidos = $apellidos;
         $this->podcasts = new ArrayCollection();
     }
 
@@ -136,6 +141,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    
 
     /**
      * @return Collection<int, Podcast>
