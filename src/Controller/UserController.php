@@ -24,9 +24,10 @@ class UserController extends AbstractController
     #[Route('/registro', name: 'podcast_userRegistro')]
     public function userRegistro(Request $request): Response
     {
-        $user = new User();
-        $registroForm = $this->createForm(UserType::class, $user, ['attr' => ['class' => 'w-100']]);
 
+        $user = new User();
+
+        $registroForm = $this->createForm(UserType::class, $user, ['attr' => ['class' => 'w-100']]);
         $registroForm->handleRequest($request);
 
         if ($registroForm->isSubmitted() && $registroForm->isValid()) {
@@ -45,12 +46,32 @@ class UserController extends AbstractController
 
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
-            'username' => 'Juan Calzadilla',
             'registroForm' => $registroForm->createView(),
         ]);
     }
 
-    #[Route('/logout', name: 'app_logout')]
+    #[Route('/registroAdmin', name: 'user_registroAdmin', methods: ['POST'])]
+    public function createUserByAdmin(Request $request): Response
+    {
+        $user = new User();
+
+        $user->setNombre($request->request->get('nombre'));
+        $user->setApellidos($request->request->get('apellidos'));
+        $user->setEmail($request->request->get('email'));
+
+        $plainPassword = $request->request->get('password');
+        $hashedPassword = password_hash($plainPassword, PASSWORD_BCRYPT);
+
+        $user->setPassword($hashedPassword);
+        $user->setRoles(['ROLE_USER']);
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        return $this->redirectToRoute('admin_index');
+    }
+
+    #[Route('/logout', name: 'app_logout',)]
     public function logout()
     {
         // controller can be blank: it will never be called!
@@ -92,9 +113,4 @@ class UserController extends AbstractController
         $this->entityManager->flush();
         return $this->redirectToRoute('admin_index');
     }
-
-
-
-
-
 }

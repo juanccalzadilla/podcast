@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Podcast;
 use App\Entity\User;
 use App\Form\PodcastType;
+use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,11 +27,13 @@ class AdminController extends AbstractController
     {
         $allPodcasts = $this->entityManager->getRepository(Podcast::class)->findAll();
         $allUsers = $this->entityManager->getRepository(User::class)->findAll();
+        $user = new User();
         return $this->render('admin/index.html.twig', [
             'controller_name' => 'AdminController',
             'podcasts' => $allPodcasts,
             'users' => $allUsers,
             'edit_form' => $this->createForm(PodcastType::class)->createView(),
+            'user_form' => $this->createForm(UserType::class, $user)->createView(),
         ]);
     }
 }
